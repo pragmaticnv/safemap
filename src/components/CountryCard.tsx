@@ -24,7 +24,13 @@ export default function CountryCard({ country, onClick }: CountryCardProps) {
         >
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-3">
-                    <span className="text-3xl filter drop-shadow-md">{country.flag}</span>
+                    <div className="w-12 h-8 rounded-md overflow-hidden bg-white/5 border border-white/10">
+                        {country.flag?.startsWith('http') ? (
+                            <img src={country.flag} alt={country.name} className="w-full h-full object-cover" />
+                        ) : (
+                            <span className="text-3xl filter drop-shadow-md flex items-center justify-center h-full">{country.flag}</span>
+                        )}
+                    </div>
                     <div>
                         <h3 className="text-lg font-bold text-white group-hover:text-green-400 transition-colors uppercase tracking-tight">
                             {country.name}
@@ -50,6 +56,7 @@ export default function CountryCard({ country, onClick }: CountryCardProps) {
                         <span className="text-2xl font-black" style={{ color: safetyColor }}>{country.safetyScore}</span>
                         <span className="text-xs text-slate-600 font-medium">/ 100</span>
                     </div>
+                    <p className="text-[9px] text-slate-700 mt-2 uppercase font-bold tracking-tighter">GPI + IQAir + Numbeo</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <span

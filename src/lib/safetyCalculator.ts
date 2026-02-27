@@ -1,4 +1,5 @@
 import { WeatherData } from "@/types";
+import { countryBaseScores, BaseScore } from "./countryBaseScores";
 
 export function calculateWeatherRisk(temp: number, windSpeed: number, condition: string): number {
     let risk = 20; // Base normal risk as per PRD
@@ -69,24 +70,38 @@ export function calculateOverallSafetyScore(
     weatherRisk: number,
     hasCriticalNews: boolean
 ): number {
-    // Formula from PRD:
-    // Disaster Risk (25%) + Crime (25%) + Air (20%) + Political (20%) + Weather (10%)
-
-    // Note: Scores should be "Safety Scores" not "Risk Scores" for the contribution
-    // For values that represent risks (like disasterRisk), we use (100 - risk)
-
     const disasterContribution = (100 - disasterRisk) * 0.25;
-    const crimeContribution = crimeLevel * 0.25; // Static data seems to use safety proportion
+    const crimeContribution = crimeLevel * 0.25;
     const airContribution = airQuality * 0.20;
     const politicalContribution = politicalRisk * 0.20;
     const weatherContribution = (100 - weatherRisk) * 0.10;
 
     let total = disasterContribution + crimeContribution + airContribution + politicalContribution + weatherContribution;
 
-    // Adjust if critical news
     if (hasCriticalNews) {
-        total = Math.min(total, 40); // Hard cap for dangerous areas
+        total = Math.min(total, 40);
     }
 
     return Math.round(Math.max(0, Math.min(100, total)));
+}
+
+const REGIONAL_AVERAGES: Record<string, BaseScore> = {
+    "Africa": { overall: 45, disaster: 45, air: 50, crime: 40, political: 40 },
+    "Americas": { overall: 65, disaster: 55, air: 70, crime: 55, political: 65 },
+    "Asia": { overall: 60, disaster: 50, air: 45, crime: 65, political: 60 },
+    "Europe": { overall: 82, disaster: 78, air: 78, crime: 80, political: 85 },
+    "Oceania": { overall: 85, disaster: 65, air: 88, crime: 85, political: 90 },
+};
+
+export async function getCountryScore(code: string, region?: string): Promise<BaseScore> {
+    const base = countryBaseScores[code.toUpperCase()];
+    if (base) return base;
+
+    // Fallback to regional average
+    if (region && REGIONAL_AVERAGES[region]) {
+        return REGIONAL_AVERAGES[region];
+    }
+
+    // Default global average if everything else fails
+    return { overall: 60, disaster: 50, air: 60, crime: 60, political: 60 };
 }
