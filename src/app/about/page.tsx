@@ -1,0 +1,298 @@
+"use client";
+
+import PageLayout from "@/components/PageLayout";
+import { Shield, Globe, Database, Cpu, Users, Zap } from "lucide-react";
+
+const STATS = [
+    { label: "Countries Monitored", value: "195", icon: <Globe className="w-5 h-5" /> },
+    { label: "Cities Tracked", value: "10,000+", icon: <Shield className="w-5 h-5" /> },
+    { label: "Data Sources", value: "8+", icon: <Database className="w-5 h-5" /> },
+    { label: "Updates Per Day", value: "288", icon: <Zap className="w-5 h-5" /> },
+];
+
+const HOW_IT_WORKS = [
+    {
+        step: "01",
+        title: "Real-Time Data Collection",
+        desc: "We continuously pull data from NASA EONET disaster feeds, USGS seismic sensors, OpenAQ air quality monitors, and NewsAPI for geopolitical events — all updated every 5 minutes.",
+        color: "#0088ff",
+        icon: "📡",
+    },
+    {
+        step: "02",
+        title: "Weighted Safety Algorithm",
+        desc: "Our proprietary algorithm calculates composite safety scores using weighted factors: Disaster (25%) + Crime (25%) + Air Quality (20%) + Political (20%) + Weather (10%) = final score.",
+        color: "#00ff88",
+        icon: "⚙️",
+    },
+    {
+        step: "03",
+        title: "AI-Powered Recommendations",
+        desc: "Using OpenAI's models, SafeMap generates personalized travel alternatives, risk assessments, and dynamic safety checklists tailored to your trip type and destination.",
+        color: "#ffaa00",
+        icon: "🤖",
+    },
+];
+
+const DATA_SOURCES = [
+    {
+        name: "NASA EONET", category: "Disaster Events", icon: "🛸", color: "#0088ff",
+        desc: "Earth Observatory Natural Event Tracker — wildfires, volcanic eruptions, severe storms"
+    },
+    {
+        name: "USGS", category: "Seismic Activity", icon: "🌋", color: "#ff6600",
+        desc: "Real-time earthquake magnitude, depth, and location data globally"
+    },
+    {
+        name: "OpenAQ", category: "Air Quality", icon: "💨", color: "#22c55e",
+        desc: "PM2.5, PM10, NO2, and AQI readings from 15,000+ monitoring stations"
+    },
+    {
+        name: "NewsAPI", category: "Geopolitical Events", icon: "📰", color: "#8b5cf6",
+        desc: "Real-time news sentiment analysis for conflict, civil unrest, and crime"
+    },
+    {
+        name: "Numbeo", category: "Crime Index", icon: "🔒", color: "#ef4444",
+        desc: "Crowdsourced crime and safety perception data for 10,000+ cities"
+    },
+    {
+        name: "OpenWeather", category: "Weather Hazards", icon: "🌤️", color: "#0088ff",
+        desc: "Severe weather warnings, extreme heat, cyclones, and flood alerts"
+    },
+    {
+        name: "Mapbox", category: "Geospatial Mapping", icon: "🗺️", color: "#14b8a6",
+        desc: "Globe rendering, country boundaries, and interactive cartography"
+    },
+    {
+        name: "OpenAI API", category: "AI Intelligence Layer", icon: "✨", color: "#a855f7",
+        desc: "GPT-4o powering personalized safety summaries and travel recommendations"
+    },
+];
+
+const TECH_STACK = [
+    { name: "Next.js 16", icon: "▲", color: "#ffffff" },
+    { name: "TypeScript", icon: "TS", color: "#3178c6" },
+    { name: "Tailwind CSS 4", icon: "🎨", color: "#38bdf8" },
+    { name: "Three.js", icon: "3D", color: "#00ff88" },
+    { name: "react-globe.gl", icon: "🌐", color: "#0088ff" },
+    { name: "Framer Motion", icon: "〰", color: "#a855f7" },
+    { name: "OpenAI API", icon: "✨", color: "#a855f7" },
+    { name: "Recharts", icon: "📊", color: "#ffaa00" },
+];
+
+const SCORE_WEIGHTS = [
+    { label: "Disaster Risk", pct: 25, color: "#ff6600" },
+    { label: "Crime Index", pct: 25, color: "#ff3333" },
+    { label: "Air Quality", pct: 20, color: "#22c55e" },
+    { label: "Political Stability", pct: 20, color: "#0088ff" },
+    { label: "Weather Risk", pct: 10, color: "#ffaa00" },
+];
+
+export default function AboutPage() {
+    return (
+        <PageLayout>
+            <div className="max-w-6xl mx-auto px-6 py-12">
+
+                {/* ── Hero ── */}
+                <div className="text-center mb-16">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6"
+                        style={{ borderColor: "rgba(0,255,136,0.25)", background: "rgba(0,255,136,0.06)" }}>
+                        <Shield className="w-4 h-4" style={{ color: "#00ff88" }} />
+                        <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#00ff88" }}>Safety Intelligence Platform</span>
+                    </div>
+                    <h1 className="text-5xl font-extrabold text-white mb-4">About SafeMap</h1>
+                    <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                        SafeMap aggregates real-time data from NASA, USGS, global news APIs, and air quality networks
+                        to provide the most comprehensive travel safety intelligence platform ever built.
+                    </p>
+                </div>
+
+                {/* ── Stat cards ── */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-20">
+                    {STATS.map(({ label, value, icon }) => (
+                        <div
+                            key={label}
+                            className="rounded-2xl p-6 border text-center transition-all hover:scale-[1.03]"
+                            style={{ background: "#111118", borderColor: "#222230" }}
+                        >
+                            <div className="flex justify-center mb-3 text-slate-500">{icon}</div>
+                            <p className="text-3xl font-extrabold text-white mb-1">{value}</p>
+                            <p className="text-xs text-slate-500">{label}</p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* ── How It Works ── */}
+                <div className="mb-20">
+                    <h2 className="text-3xl font-bold text-white text-center mb-10">How SafeMap Works</h2>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {HOW_IT_WORKS.map(({ step, title, desc, color, icon }) => (
+                            <div
+                                key={step}
+                                className="rounded-3xl p-8 border relative overflow-hidden transition-all duration-200 hover:scale-[1.02]"
+                                style={{ background: "#111118", borderColor: `${color}25` }}
+                            >
+                                {/* Big step number in background */}
+                                <div
+                                    className="absolute top-4 right-5 text-7xl font-black opacity-[0.05] pointer-events-none"
+                                    style={{ color }}
+                                >
+                                    {step}
+                                </div>
+                                <div
+                                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-5"
+                                    style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+                                >
+                                    {icon}
+                                </div>
+                                <div
+                                    className="text-xs font-bold tracking-widest uppercase mb-2"
+                                    style={{ color }}
+                                >
+                                    Step {step}
+                                </div>
+                                <h3 className="text-lg font-bold text-white mb-3">{title}</h3>
+                                <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ── Score Methodology ── */}
+                <div className="rounded-3xl p-10 border mb-20" style={{ background: "#111118", borderColor: "#222230" }}>
+                    <h2 className="text-3xl font-bold text-white mb-2">Safety Score Methodology</h2>
+                    <p className="text-slate-400 text-sm mb-8">
+                        Our composite score is derived from five independently researched data streams, each weighted by
+                        statistical impact on traveller safety outcomes.
+                    </p>
+
+                    <div className="flex flex-col gap-4 mb-8">
+                        {SCORE_WEIGHTS.map(({ label, pct, color }) => (
+                            <div key={label}>
+                                <div className="flex justify-between text-sm mb-1.5">
+                                    <span className="text-slate-300 font-medium">{label}</span>
+                                    <span className="font-bold" style={{ color }}>{pct}%</span>
+                                </div>
+                                <div className="h-3 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                                    <div
+                                        className="h-full rounded-full transition-all duration-1000"
+                                        style={{ width: `${pct * 4}%`, background: color, boxShadow: `0 0 10px ${color}44` }}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Visual total */}
+                    <div
+                        className="flex flex-wrap gap-2 p-4 rounded-xl border"
+                        style={{ borderColor: "rgba(0,255,136,0.2)", background: "rgba(0,255,136,0.04)" }}
+                    >
+                        {SCORE_WEIGHTS.map(({ label, pct, color }) => (
+                            <div key={label} className="flex items-center gap-1.5 text-xs">
+                                <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
+                                <span className="text-slate-400">{label} ({pct}%)</span>
+                                <span className="text-slate-600">+</span>
+                            </div>
+                        ))}
+                        <span className="text-xs font-bold" style={{ color: "#00ff88" }}>= Safety Score / 100</span>
+                    </div>
+                </div>
+
+                {/* ── Data Sources ── */}
+                <div className="mb-20">
+                    <h2 className="text-3xl font-bold text-white mb-2">Data Sources</h2>
+                    <p className="text-slate-400 text-sm mb-8">
+                        SafeMap integrates with authoritative data providers to ensure accuracy and real-time coverage.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {DATA_SOURCES.map(({ name, category, icon, color, desc }) => (
+                            <div
+                                key={name}
+                                className="rounded-2xl p-5 border transition-all duration-200 hover:scale-[1.03] cursor-pointer"
+                                style={{ background: "#111118", borderColor: `${color}22` }}
+                            >
+                                <div
+                                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4"
+                                    style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+                                >
+                                    {icon}
+                                </div>
+                                <p className="font-bold text-white text-base mb-1">{name}</p>
+                                <p className="text-xs font-semibold mb-2" style={{ color }}>{category}</p>
+                                <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ── Tech Stack ── */}
+                <div className="mb-20">
+                    <h2 className="text-3xl font-bold text-white mb-8">Tech Stack</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {TECH_STACK.map(({ name, icon, color }) => (
+                            <div
+                                key={name}
+                                className="rounded-2xl p-5 border text-center transition-all duration-200 hover:scale-[1.05]"
+                                style={{ background: "#111118", borderColor: "#222230" }}
+                            >
+                                <div
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold mx-auto mb-3"
+                                    style={{ background: `${color}15`, border: `1px solid ${color}30`, color }}
+                                >
+                                    {icon}
+                                </div>
+                                <p className="text-sm font-semibold text-white">{name}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ── Team ── */}
+                <div
+                    className="rounded-3xl p-10 border text-center"
+                    style={{
+                        background: "linear-gradient(135deg, rgba(0,255,136,0.04) 0%, rgba(0,136,255,0.04) 100%)",
+                        borderColor: "rgba(0,255,136,0.15)",
+                    }}
+                >
+                    <div className="mb-6">
+                        <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl"
+                            style={{ background: "rgba(0,255,136,0.1)", border: "2px solid rgba(0,255,136,0.25)" }}>
+                            <Users className="w-8 h-8" style={{ color: "#00ff88" }} />
+                        </div>
+                        <div
+                            className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
+                            style={{ background: "rgba(0,255,136,0.1)", color: "#00ff88", border: "1px solid rgba(0,255,136,0.25)" }}
+                        >
+                            Built For Open Innovation Challenge
+                        </div>
+                    </div>
+
+                    <h2 className="text-3xl font-extrabold text-white mb-2">Team SafeMap</h2>
+                    <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+                        &ldquo;Disruptive Tech for Real World Impact&rdquo;
+                    </p>
+
+                    <div className="grid md:grid-cols-3 gap-5 max-w-2xl mx-auto">
+                        {[
+                            { label: "Team Name", value: "Team SafeMap", icon: <Cpu className="w-4 h-4" /> },
+                            { label: "College", value: "Your Institution Here", icon: <Shield className="w-4 h-4" /> },
+                            { label: "Team Leader", value: "Your Name Here", icon: <Users className="w-4 h-4" /> },
+                        ].map(({ label, value, icon }) => (
+                            <div
+                                key={label}
+                                className="rounded-2xl p-5 border"
+                                style={{ background: "#111118", borderColor: "#222230" }}
+                            >
+                                <div className="flex items-center gap-2 mb-2 text-slate-500">{icon}<span className="text-xs">{label}</span></div>
+                                <p className="font-semibold text-white text-sm">{value}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+            </div>
+        </PageLayout>
+    );
+}

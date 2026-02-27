@@ -1,0 +1,13 @@
+
+> safemap@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.166.189.163:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 381ms
+OpenRouter/AI Error: { error: { message: 'User not found.', code: 401 } }
+ POST /api/chat 401 in 1701ms (compile: 83ms, render: 1617ms)
