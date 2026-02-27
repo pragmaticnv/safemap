@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Shield, Globe, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
     { label: "Home", href: "/" },
@@ -17,6 +19,9 @@ export default function Navbar() {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [timeStr, setTimeStr] = useState("");
+    const [user, setUser] = useState<SupabaseUser | null>(null);
+    const [loading, setLoading] = useState(true);
+    const supabase = createClient();
 
     useEffect(() => {
         const update = () => {
@@ -25,8 +30,29 @@ export default function Navbar() {
         };
         update();
         const id = setInterval(update, 30_000);
-        return () => clearInterval(id);
-    }, []);
+
+        // Auth listener
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
+
+        // Get initial session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
+
+        return () => {
+            clearInterval(id);
+            subscription.unsubscribe();
+        };
+    }, [supabase.auth]);
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+        setMobileOpen(false);
+    };
 
     return (
         <nav
@@ -60,50 +86,65 @@ export default function Navbar() {
                 </Link>
 
                 {/* ── Desktop Nav ── */}
-                <ul className="hidden md:flex items-center gap-1">
-                    {navLinks.map((link) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <li key={link.href}>
-                                <Link
-                                    href={link.href}
-                                    className="relative px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-white/5 group"
-                                    style={{ color: isActive ? "#00ff88" : "#94a3b8" }}
-                                >
-                                    {link.label}
-                                    <span
-                                        className="absolute bottom-1 left-4 right-4 h-px transition-transform duration-300 origin-left"
-                                        style={{
-                                            background: "#00ff88",
-                                            transform: isActive ? "scaleX(1)" : "scaleX(0)",
-                                        }}
-                                    />
-                                </Link>
-                            </li>
-                        );
-                    })}
-                </ul>
+                <div className="hidden md:flex items-center gap-8">
+                    <ul className="flex items-center gap-1">
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <li key={link.href}>
+                                    <Link
+                                        href={link.href}
+                                        className="relative px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-white/5 group"
+                                        style={{ color: isActive ? "#00ff88" : "#94a3b8" }}
+                                    >
+                                        {link.label}
+                                        <span
+                                            className="absolute bottom-1 left-4 right-4 h-px transition-transform duration-300 origin-left"
+                                            style={{
+                                                background: "#00ff88",
+                                                transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                                            }}
+                                        />
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
 
-                {/* ── Live badge ── */}
-                <div
-                    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border"
-                    style={{
-                        background: "rgba(0,255,136,0.05)",
-                        borderColor: "rgba(0,255,136,0.2)",
-                    }}
-                >
-                    <span
-                        className="w-2 h-2 rounded-full animate-pulse"
-                        style={{ background: "#00ff88", boxShadow: "0 0 8px #00ff88" }}
-                    />
-                    <span className="text-xs font-medium" style={{ color: "#00ff88" }}>
-                        LIVE
-                    </span>
-                    {timeStr && (
-                        <span className="text-xs text-slate-500 border-l border-white/10 pl-2 ml-1">
-                            Updated {timeStr}
-                        </span>
-                    )}
+                    {/* Auth Section */}
+                    <div className="flex items-center gap-4 pl-4 border-l border-white/10">
+                        {loading ? (
+                            <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+                        ) : user ? (
+                            <div className="flex items-center gap-3">
+                                <Link
+                                    href="/profile"
+                                    className="px-4 py-1.5 rounded-lg text-xs font-bold border transition-all hover:bg-white/5 whitespace-nowrap"
+                                    style={{ borderColor: "rgba(0,136,255,0.3)", color: "#0088ff" }}
+                                >
+                                    Profile
+                                </Link>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="text-xs text-slate-500 hover:text-white transition-colors"
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
+                        ) : (
+                            <Link
+                                href="/login?mode=signup"
+                                className="px-5 py-2 rounded-xl text-xs font-bold transition-all duration-200 hover:scale-105 active:scale-95 whitespace-nowrap"
+                                style={{
+                                    background: "linear-gradient(135deg, #00ff88, #00cc6a)",
+                                    color: "#0a0a0f",
+                                    boxShadow: "0 4px 16px rgba(0,255,136,0.2)",
+                                }}
+                            >
+                                Get Started
+                            </Link>
+                        )}
+                    </div>
                 </div>
 
                 {/* ── Mobile toggle ── */}
@@ -119,7 +160,7 @@ export default function Navbar() {
             {/* ── Mobile drawer ── */}
             {mobileOpen && (
                 <div
-                    className="md:hidden border-t border-white/5 px-6 py-4"
+                    className="md:hidden border-t border-white/5 px-6 py-6 space-y-4"
                     style={{ background: "rgba(10,10,15,0.97)" }}
                 >
                     {navLinks.map((link) => {
@@ -140,10 +181,36 @@ export default function Navbar() {
                         );
                     })}
 
-                    {/* Mobile live badge */}
-                    <div className="mt-4 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#00ff88" }} />
-                        <span className="text-xs" style={{ color: "#00ff88" }}>LIVE · Updated {timeStr}</span>
+                    {/* Mobile Auth */}
+                    <div className="pt-4 space-y-3">
+                        {loading ? (
+                            <div className="h-10 w-full bg-white/5 animate-pulse rounded-xl" />
+                        ) : user ? (
+                            <>
+                                <Link
+                                    href="/profile"
+                                    className="block w-full py-3 text-center rounded-xl bg-blue-500/10 border border-blue-500/20 text-[#0088ff] text-sm font-bold"
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    My Profile
+                                </Link>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="block w-full py-3 text-center text-slate-500 text-sm font-medium"
+                                >
+                                    Sign Out
+                                </button>
+                            </>
+                        ) : (
+                            <Link
+                                href="/login?mode=signup"
+                                className="block w-full py-4 text-center rounded-2xl text-sm font-bold"
+                                style={{ background: "linear-gradient(135deg, #00ff88, #00cc6a)", color: "#0a0a0f" }}
+                                onClick={() => setMobileOpen(false)}
+                            >
+                                Get Started
+                            </Link>
+                        )}
                     </div>
                 </div>
             )}

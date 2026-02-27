@@ -6,8 +6,8 @@ import { Shield, Globe, Database, Cpu, Users, Zap } from "lucide-react";
 const STATS = [
     { label: "Countries Monitored", value: "195", icon: <Globe className="w-5 h-5" /> },
     { label: "Cities Tracked", value: "10,000+", icon: <Shield className="w-5 h-5" /> },
-    { label: "Data Sources", value: "8+", icon: <Database className="w-5 h-5" /> },
-    { label: "Updates Per Day", value: "288", icon: <Zap className="w-5 h-5" /> },
+    { label: "Safety Datasets", value: "8+", icon: <Database className="w-5 h-5" /> },
+    { label: "Live Sensors", value: "25,000+", icon: <Zap className="w-5 h-5" /> },
 ];
 
 const HOW_IT_WORKS = [
@@ -32,52 +32,6 @@ const HOW_IT_WORKS = [
         color: "#ffaa00",
         icon: "🤖",
     },
-];
-
-const DATA_SOURCES = [
-    {
-        name: "NASA EONET", category: "Disaster Events", icon: "🛸", color: "#0088ff",
-        desc: "Earth Observatory Natural Event Tracker — wildfires, volcanic eruptions, severe storms"
-    },
-    {
-        name: "USGS", category: "Seismic Activity", icon: "🌋", color: "#ff6600",
-        desc: "Real-time earthquake magnitude, depth, and location data globally"
-    },
-    {
-        name: "OpenAQ", category: "Air Quality", icon: "💨", color: "#22c55e",
-        desc: "PM2.5, PM10, NO2, and AQI readings from 15,000+ monitoring stations"
-    },
-    {
-        name: "NewsAPI", category: "Geopolitical Events", icon: "📰", color: "#8b5cf6",
-        desc: "Real-time news sentiment analysis for conflict, civil unrest, and crime"
-    },
-    {
-        name: "Numbeo", category: "Crime Index", icon: "🔒", color: "#ef4444",
-        desc: "Crowdsourced crime and safety perception data for 10,000+ cities"
-    },
-    {
-        name: "OpenWeather", category: "Weather Hazards", icon: "🌤️", color: "#0088ff",
-        desc: "Severe weather warnings, extreme heat, cyclones, and flood alerts"
-    },
-    {
-        name: "Mapbox", category: "Geospatial Mapping", icon: "🗺️", color: "#14b8a6",
-        desc: "Globe rendering, country boundaries, and interactive cartography"
-    },
-    {
-        name: "OpenAI API", category: "AI Intelligence Layer", icon: "✨", color: "#a855f7",
-        desc: "GPT-4o powering personalized safety summaries and travel recommendations"
-    },
-];
-
-const TECH_STACK = [
-    { name: "Next.js 16", icon: "▲", color: "#ffffff" },
-    { name: "TypeScript", icon: "TS", color: "#3178c6" },
-    { name: "Tailwind CSS 4", icon: "🎨", color: "#38bdf8" },
-    { name: "Three.js", icon: "3D", color: "#00ff88" },
-    { name: "react-globe.gl", icon: "🌐", color: "#0088ff" },
-    { name: "Framer Motion", icon: "〰", color: "#a855f7" },
-    { name: "OpenAI API", icon: "✨", color: "#a855f7" },
-    { name: "Recharts", icon: "📊", color: "#ffaa00" },
 ];
 
 const SCORE_WEIGHTS = [
@@ -196,55 +150,6 @@ export default function AboutPage() {
                             </div>
                         ))}
                         <span className="text-xs font-bold" style={{ color: "#00ff88" }}>= Safety Score / 100</span>
-                    </div>
-                </div>
-
-                {/* ── Data Sources ── */}
-                <div className="mb-20">
-                    <h2 className="text-3xl font-bold text-white mb-2">Data Sources</h2>
-                    <p className="text-slate-400 text-sm mb-8">
-                        SafeMap integrates with authoritative data providers to ensure accuracy and real-time coverage.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {DATA_SOURCES.map(({ name, category, icon, color, desc }) => (
-                            <div
-                                key={name}
-                                className="rounded-2xl p-5 border transition-all duration-200 hover:scale-[1.03] cursor-pointer"
-                                style={{ background: "#111118", borderColor: `${color}22` }}
-                            >
-                                <div
-                                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4"
-                                    style={{ background: `${color}15`, border: `1px solid ${color}30` }}
-                                >
-                                    {icon}
-                                </div>
-                                <p className="font-bold text-white text-base mb-1">{name}</p>
-                                <p className="text-xs font-semibold mb-2" style={{ color }}>{category}</p>
-                                <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ── Tech Stack ── */}
-                <div className="mb-20">
-                    <h2 className="text-3xl font-bold text-white mb-8">Tech Stack</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {TECH_STACK.map(({ name, icon, color }) => (
-                            <div
-                                key={name}
-                                className="rounded-2xl p-5 border text-center transition-all duration-200 hover:scale-[1.05]"
-                                style={{ background: "#111118", borderColor: "#222230" }}
-                            >
-                                <div
-                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold mx-auto mb-3"
-                                    style={{ background: `${color}15`, border: `1px solid ${color}30`, color }}
-                                >
-                                    {icon}
-                                </div>
-                                <p className="text-sm font-semibold text-white">{name}</p>
-                            </div>
-                        ))}
                     </div>
                 </div>
 
